@@ -23,6 +23,18 @@ Then call 'colorPicker' method on the text field when document loads.
   }
 </script>
 
+Your favorite colors are missing? 
+Just add them to the palette
+<script language="javascript">
+  //use this method to add new colors to palette
+  $.fn.colorPicker.addColors(['000', '000', 'fff', 'fff']);
+</script>
+
+Or completely change the color palette as you need...
+<script language="javascript">
+  $.fn.colorPicker.defaultColors = ['000', '000', 'fff', 'fff'];
+</script>
+
 That’s all you have to do!
 
 

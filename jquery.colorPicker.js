@@ -57,7 +57,7 @@
       if(event.keyCode == 27) {toggleSelector()}
      });
      
-     $("<div class='_color_custom'></div>").append(hex_field).appendTo(selector);
+     $("<div id='_color_custom'></div>").append(hex_field).appendTo(selector);
                
      $("body").append(selector); 
      selector.hide();
