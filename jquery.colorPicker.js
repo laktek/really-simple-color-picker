@@ -104,10 +104,11 @@
   changeColor = function(value){
     if(selectedValue = toHex(value)){
       $(selectorOwner).css("background-color", selectedValue);
-      $(selectorOwner).next("input").val(selectedValue);
+      $(selectorOwner).next("input").val(selectedValue).change();
     
       //close the selector
       hideSelector();    
+      //$(selectorOwner).next("input")
     }
   };
   
