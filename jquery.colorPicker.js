@@ -108,7 +108,6 @@
     
       //close the selector
       hideSelector();    
-      //$(selectorOwner).next("input")
     }
   };
   
