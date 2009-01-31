@@ -24,18 +24,19 @@
     control.bind("click", toggleSelector);
     
     //add the color picker section
-    $(element).before(control);
+    $(element).after(control);
     
     //hide the input box
     $(element).hide();
   };
   
   buildSelector = function(){
-     selector = $("<div id='_color_selector'></div>");
-     
+     selector = $("<tbody><tr></tr></tbody>");
+     $("body").append(selector); 
+
      //add color pallete
      $.each($.fn.colorPicker.defaultColors, function(i){
-      swatch = $("<div class='_color_swatch'></div>");
+      swatch = $("<td class='_color_swatch'></td>");
       swatch.css("background-color", "#" + this);
       swatch.bind("click", function(e){ changeColor($(this).css("background-color")) });
       swatch.bind("mouseover", function(e){ 
@@ -59,8 +60,8 @@
      
      $("<div id='_color_custom'></div>").append(hex_field).appendTo(selector);
                
-     $("body").append(selector); 
-     selector.hide();
+     //selector.hide();
+
   };
   
   checkMouse = function(event){
@@ -82,6 +83,8 @@
   
   showSelector = function(){
     var selector = $("div#_color_selector");
+    
+    //alert($(selectorOwner).offset().top);
     
     selector.css({
       top: $(selectorOwner).offset().top + ($(selectorOwner).outerHeight()),
