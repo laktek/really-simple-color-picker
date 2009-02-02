@@ -17,7 +17,7 @@
   
   buildPicker = function(element){
     //build color picker
-    control = $("<div class='color_picker'></div>")
+    control = $("<div class='color_picker'>&nbsp;</div>")
     control.css('background-color', $(element).val());
     
     //bind click event to color picker
@@ -31,42 +31,42 @@
   };
   
   buildSelector = function(){
-     selector = $("<tbody><tr></tr></tbody>");
-     $("body").append(selector); 
+    selector = $("<div id='color_selector'></div>");
 
      //add color pallete
      $.each($.fn.colorPicker.defaultColors, function(i){
-      swatch = $("<td class='_color_swatch'></td>");
+      swatch = $("<div class='color_swatch'>&nbsp;</div>")
       swatch.css("background-color", "#" + this);
       swatch.bind("click", function(e){ changeColor($(this).css("background-color")) });
       swatch.bind("mouseover", function(e){ 
         $(this).css("border-color", "#598FEF"); 
-        $("input#_color_value").val(toHex($(this).css("background-color")));    
+        $("input#color_value").val(toHex($(this).css("background-color")));    
         }); 
       swatch.bind("mouseout", function(e){ 
         $(this).css("border-color", "#000");
-        $("input#_color_value").val(toHex($(selectorOwner).css("background-color")));
+        $("input#color_value").val(toHex($(selectorOwner).css("background-color")));
         });
       
-      swatch.appendTo(selector);
+     swatch.appendTo(selector);
      });
   
      //add HEX value field
-     hex_field = $("<label for='_color_value'>Hex</label><input type='text' size='8' id='_color_value'/>");
+     hex_field = $("<label for='color_value'>Hex</label><input type='text' size='8' id='color_value'/>");
      hex_field.bind("keydown", function(event){
       if(event.keyCode == 13) {changeColor($(this).val());}
       if(event.keyCode == 27) {toggleSelector()}
      });
      
-     $("<div id='_color_custom'></div>").append(hex_field).appendTo(selector);
-               
+     $("<div id='color_custom'></div>").append(hex_field).appendTo(selector);
+
+     $("body").append(selector); 
      //selector.hide();
 
   };
   
   checkMouse = function(event){
     //check the click was on selector itself or on selectorOwner
-    var selector = "div#_color_selector";
+    var selector = "div#color_selector";
     var selectorParent = $(event.target).parents(selector).length;
     if(event.target == $(selector)[0] || event.target == selectorOwner || selectorParent > 0) return
     
@@ -74,7 +74,7 @@
   }
   
   hideSelector = function(){
-    var selector = $("div#_color_selector");
+    var selector = $("div#color_selector");
     
     $(document).unbind("mousedown", checkMouse);
     selector.hide();
@@ -82,7 +82,7 @@
   }
   
   showSelector = function(){
-    var selector = $("div#_color_selector");
+    var selector = $("div#color_selector");
     
     //alert($(selectorOwner).offset().top);
     
@@ -91,7 +91,7 @@
       left: $(selectorOwner).offset().left
     }); 
     hexColor = $(selectorOwner).next("input").val();
-    $("input#_color_value").val(hexColor);
+    $("input#color_value").val(hexColor);
     selector.show();
     
     //bind close event handler
