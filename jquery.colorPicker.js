@@ -60,7 +60,7 @@
      $("<div id='color_custom'></div>").append(hex_field).appendTo(selector);
 
      $("body").append(selector); 
-     //selector.hide();
+     selector.hide();
 
   };
   
