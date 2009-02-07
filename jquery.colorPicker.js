@@ -90,7 +90,7 @@
       top: $(selectorOwner).offset().top + ($(selectorOwner).outerHeight()),
       left: $(selectorOwner).offset().left
     }); 
-    hexColor = $(selectorOwner).next("input").val();
+    hexColor = $(selectorOwner).prev("input").val();
     $("input#color_value").val(hexColor);
     selector.show();
     
