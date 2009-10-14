@@ -9,7 +9,8 @@
 (function($){
   $.fn.colorPicker = function(){    
     if(this.length > 0) buildSelector();
-    return this.each(function(i) { buildPicker(this)}); 
+    return this.each(function(i) { 
+      buildPicker(this)}); 
   };
   
   var selectorOwner;
@@ -25,9 +26,16 @@
     
     //add the color picker section
     $(element).after(control);
+
+    //add even listener to input box
+    $(element).bind("change", function() {
+      selectedValue = toHex($(element).val());
+      $(element).next(".color_picker").css("background-color", selectedValue);
+    });
     
     //hide the input box
     $(element).hide();
+
   };
   
   buildSelector = function(){
@@ -61,7 +69,6 @@
 
      $("body").append(selector); 
      selector.hide();
-
   };
   
   checkMouse = function(event){
