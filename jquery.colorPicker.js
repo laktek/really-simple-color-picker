@@ -12,6 +12,7 @@
      * Create a couple private variables.
     **/
     var selectorOwner,
+        activePalette,
         cItterate       = 0,
         templates       = {
             control : $('<div class="colorPicker-picker">&nbsp;</div>'),
@@ -70,7 +71,7 @@
                     $.fn.colorPicker.changeColor($.fn.colorPicker.toHex($(this).val()));
                 }
                 if (event.keyCode === 27) {
-                    $.fn.colorPicker.togglePalette(paletteId);
+                    $.fn.colorPicker.hidePalette(paletteId);
                 }
             });
 
@@ -86,10 +87,10 @@
             /**
              * Build replacement interface for original color input.
             **/
-            newControl.css({"background-color": defaultColor});
+            newControl.css("background-color", defaultColor);
 
             newControl.bind("click", function () {
-                $.fn.colorPicker.togglePalette(paletteId, $(this));
+                $.fn.colorPicker.togglePalette($('#' + paletteId), $(this));
             });
 
             element.after(newControl);
@@ -153,41 +154,21 @@
          * Check whether user clicked on the selector or owner.
         **/
         checkMouse : function (event, paletteId) {
-            var selector = paletteId,
-                selectorParent = $(event.target).parents(selector).length;
+            var selector = activePalette,
+                selectorParent = $(event.target).parents("#" + selector.attr('id')).length;
 
             if (event.target == $(selector)[0] || event.target == selectorOwner || selectorParent > 0) {
                 return;
             }
-        },
 
-        /**
-         * Toggle visibility of the colorPicker palette.
-        **/
-        togglePalette : function (paletteId, origin) {
-            var selector = $('#' + paletteId);
-
-            if (origin) {
-                // selectorOwner is the clicked .colorPicker-picker.
-                selectorOwner = origin;
-            }
-
-            if (selector.is(':visible')) {
-                $.fn.colorPicker.hidePalette();
-
-            } else {
-                $.fn.colorPicker.showPalette(selector);
-
-            }
+            $.fn.colorPicker.hidePalette();
         },
 
         /**
          * Hide the color palette modal.
         **/
         hidePalette : function (paletteId) {
-            $(document).unbind("mousedown", function (ev) {
-                $.fn.colorPicker.checkMouse();
-            });
+            $(document).unbind("mousedown", $.fn.colorPicker.checkMouse);
 
             $('.colorPicker-palette').hide();
         },
@@ -207,9 +188,27 @@
 
             palette.show();
 
-            $(document).bind("mousedown", function (ev) {
-                $.fn.colorPicker.checkMouse(ev, palette.selector);
-            }, false);
+            $(document).bind("mousedown", $.fn.colorPicker.checkMouse);
+        },
+
+        /**
+         * Toggle visibility of the colorPicker palette.
+        **/
+        togglePalette : function (palette, origin) {
+            // selectorOwner is the clicked .colorPicker-picker.
+            if (origin) {
+                selectorOwner = origin;
+            }
+
+            activePalette = palette;
+
+            if (activePalette.is(':visible')) {
+                $.fn.colorPicker.hidePalette();
+
+            } else {
+                $.fn.colorPicker.showPalette(palette);
+
+            }
         },
 
         /**
