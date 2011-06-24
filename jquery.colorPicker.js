@@ -27,10 +27,12 @@
     **/
     $.fn.colorPicker = function (options) {
         return this.each(function () {
-            // Any new options for this particular instance?
+            // Setup time. Clone new elements from our templates, set some IDs, make shortcuts, jazzercise.
             var element      = $(this),
                 opts         = $.extend({}, $.fn.colorPicker.defaults, options),
-                defaultColor = (element.val().length > 0) ? element.val() : opts.pickerDefault,
+                defaultColor = $.fn.colorPicker.toHex(
+                        (element.val().length > 0) ? element.val() : opts.pickerDefault
+                    ),
                 newControl   = templates.control.clone(),
                 newPalette   = templates.palette.clone().attr('id', 'colorPicker_palette-' + cItterate),
                 newHexLabel  = templates.hexLabel.clone(),
@@ -82,9 +84,9 @@
 
 
             /**
-             * Build replacement interface for the color picker.
+             * Build replacement interface for original color input.
             **/
-            newControl.css('background-color', defaultColor);
+            newControl.css({"background-color": defaultColor});
 
             newControl.bind("click", function () {
                 $.fn.colorPicker.togglePalette(paletteId, $(this));
@@ -99,7 +101,7 @@
             });
 
             // Hide the original input.
-            element.hide();
+            element.val(defaultColor).hide();
 
             cItterate++;
         });
