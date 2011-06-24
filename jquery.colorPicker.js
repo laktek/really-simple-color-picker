@@ -21,7 +21,8 @@
             hexLabel: $('<label for="colorPicker_hex">Hex</label>'),
             hexField: $('<input type="text" id="colorPicker_hex" />')
         },
-        transparent     = "transparent";
+        transparent     = "transparent",
+        lastColor;
 
     /**
      * Create our colorPicker function
@@ -64,7 +65,10 @@
 
             newHexLabel.attr('for', 'colorPicker_hex-' + cItterate);
 
-            newHexField.attr('id', 'colorPicker_hex-' + cItterate);
+            newHexField.attr({
+                'id'    : 'colorPicker_hex-' + cItterate,
+                'value' : defaultColor
+            });
 
             newHexField.bind("keydown", function (event) {
                 if (event.keyCode === 13) {
@@ -230,9 +234,13 @@
 
             element.bind({
                 click : function (ev) {
+                    lastColor = color;
+
                     $.fn.colorPicker.changeColor(color);
                 },
                 mouseover : function (ev) {
+                    lastColor = paletteInput.val();
+
                     $(this).css("border-color", "#598FEF");
 
                     paletteInput.val(color);
@@ -242,7 +250,7 @@
 
                     paletteInput.val(selectorOwner.css("background-color"));
 
-                    paletteInput.val("#ffffff");
+                    paletteInput.val(lastColor);
                 }
             });
         }
