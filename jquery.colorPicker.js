@@ -2,57 +2,68 @@
  * Really Simple Color Picker in jQuery
  * 
  * Copyright (c) 2008 Lakshan Perera (www.laktek.com)
- * Licensed under the MIT (MIT-LICENSE.txt)  licenses.
- * 
+ * Fork and rewrite by Daniel Lacy (daniellacy.com)
+ * Licensed under the MIT (MIT-LICENSE.txt) licenses.
+ *
  */
 
 (function ($) {
     /**
-     * Create a couple private variables to use around our function.
+     * Create a couple private variables.
     **/
     var selectorOwner,
-        cItterate = 0,
-        paletteTemplate = $('<div id="colorPicker_palette" class="colorPicker-palette" />');
+        cItterate       = 0,
+        templates       = {
+            control : $('<div class="colorPicker-picker">&nbsp;</div>'),
+            palette : $('<div id="colorPicker_palette" class="colorPicker-palette" />'),
+            swatch  : $('<div class="colorPicker-swatch">&nbsp;</div>'),
+            hexLabel: $('<label for="colorPicker_hex">Hex</label>'),
+            hexField: $('<input type="text" id="colorPicker_hex" />')
+        },
+        transparent     = "transparent";
 
     /**
      * Create our colorPicker function
     **/
     $.fn.colorPicker = function (options) {
-        var opts = $.extend({}, $.fn.colorPicker.defaults, options);
-
         return this.each(function () {
-            // $.fn.colorPicker.buildSelector(opts);
-            // 
-            // $.fn.colorPicker.buildPicker(this, opts);
+            // Any new options for this particular instance?
+            var element      = $(this),
+                opts         = $.extend({}, $.fn.colorPicker.defaults, options),
+                defaultColor = (element.val().length > 0) ? element.val() : opts.pickerDefault,
+                newControl   = templates.control.clone(),
+                newPalette   = templates.palette.clone().attr('id', 'colorPicker_palette-' + cItterate),
+                newHexLabel  = templates.hexLabel.clone(),
+                newHexField  = templates.hexField.clone(),
+                paletteId    = newPalette[0].id,
+                swatch;
 
             /**
-             * Build a palette selection that we'll use to allow a user to pick a color.
+             * Build a color palette.
             **/
-            var newPalette  = paletteTemplate.clone().attr('id', 'colorPicker_palette-' + cItterate),
-                paletteId   = newPalette[0].id,
-                swatch      = $('<div class="color_swatch">&nbsp;</div>'),
-                hex_field   = $('<label for="color_value">Hex</label><input type="text" size="8" id="color_value" />');
-
-            //add color palette
             $.each(opts.colors, function (i) {
-                swatch = swatch.clone();
+                swatch = templates.swatch.clone();
 
-                if (opts.colors[i] === "transparent") {
-                    swatch.text('X');
+                if (opts.colors[i] === transparent) {
+                    swatch.addClass(transparent).text('X');
 
-                    $.fn.colorPicker.bindPalette(swatch, "transparent");
+                    $.fn.colorPicker.bindPalette(newHexField, swatch, transparent);
 
                 } else {
                     swatch.css("background-color", "#" + this);
 
-                    $.fn.colorPicker.bindPalette(swatch);
+                    $.fn.colorPicker.bindPalette(newHexField, swatch);
 
                 }
 
                 swatch.appendTo(newPalette);
             });
 
-            hex_field.bind("keydown", function (event) {
+            newHexLabel.attr('for', 'colorPicker_hex-' + cItterate);
+
+            newHexField.attr('id', 'colorPicker_hex-' + cItterate);
+
+            newHexField.bind("keydown", function (event) {
                 if (event.keyCode === 13) {
                     $.fn.colorPicker.changeColor($.fn.colorPicker.toHex($(this).val()));
                 }
@@ -61,7 +72,9 @@
                 }
             });
 
-            $('<div id="color_custom"></div>').append(hex_field).appendTo(newPalette);
+            $('<div class="colorPicker_hexWrap" />').append(newHexLabel).appendTo(newPalette);
+
+            newPalette.find('.colorPicker_hexWrap').append(newHexField);
 
             $("body").append(newPalette);
 
@@ -69,32 +82,24 @@
 
 
             /**
-             * Build the interface replacement for the color picker.
+             * Build replacement interface for the color picker.
             **/
-            var element      = this,
-                control      = $('<div class="colorPicker-picker">&nbsp;</div>'),
-                defaultColor = (opts.pickerDefault !== "FFFFFF") ? "#" + opts.pickerDefault : $(element).val();
+            newControl.css('background-color', defaultColor);
 
-            control.css('background-color', defaultColor);
-
-            //bind click event to color picker
-            control.bind("click", function () {
+            newControl.bind("click", function () {
                 $.fn.colorPicker.togglePalette(paletteId, $(this));
             });
 
-            //add the color picker section
-            $(element).after(control);
+            element.after(newControl);
 
-            //add even listener to input box
-            $(element).bind("change", function () {
-                var selectedValue = $.fn.colorPicker.toHex($(element).val());
-
-                $(element).next(".colorPicker-picker").css("background-color", selectedValue);
+            element.bind("change", function () {
+                element.next(".colorPicker-picker").css(
+                    "background-color", $.fn.colorPicker.toHex($(this).val())
+                );
             });
 
-            //hide the input box
-            $(element).hide();
-
+            // Hide the original input.
+            element.hide();
 
             cItterate++;
         });
@@ -152,8 +157,6 @@
             if (event.target == $(selector)[0] || event.target == selectorOwner || selectorParent > 0) {
                 return;
             }
-
-            $.fn.colorPicker.hidePalette();
         },
 
         /**
@@ -163,8 +166,7 @@
             var selector = $('#' + paletteId);
 
             if (origin) {
-                // selectorOwner is the .colorPicker-picker div we
-                // clicked on to get our color palette.
+                // selectorOwner is the clicked .colorPicker-picker.
                 selectorOwner = origin;
             }
 
@@ -181,7 +183,9 @@
          * Hide the color palette modal.
         **/
         hidePalette : function (paletteId) {
-            $(document).unbind("mousedown", $.fn.colorPicker.checkMouse);
+            $(document).unbind("mousedown", function (ev) {
+                $.fn.colorPicker.checkMouse();
+            });
 
             $('.colorPicker-palette').hide();
         },
@@ -203,7 +207,7 @@
 
             $(document).bind("mousedown", function (ev) {
                 $.fn.colorPicker.checkMouse(ev, palette.selector);
-            });
+            }, false);
         },
 
         /**
@@ -220,8 +224,8 @@
         /**
          * Bind events to the color palette swatches.
         */
-        bindPalette : function (element, color) {
-            color = (color === "transparent") ? color : $.fn.colorPicker.toHex(element.css("background-color"));
+        bindPalette : function (paletteInput, element, color) {
+            color = color ? color : $.fn.colorPicker.toHex(element.css("background-color"));
 
             element.bind({
                 click : function (ev) {
@@ -230,14 +234,14 @@
                 mouseover : function (ev) {
                     $(this).css("border-color", "#598FEF");
 
-                    $("#color_value").val(color);
+                    paletteInput.val(color);
                 },
                 mouseout : function (ev) {
                     $(this).css("border-color", "#000");
 
-                    $("#color_value").val(selectorOwner.css("background-color"));
+                    paletteInput.val(selectorOwner.css("background-color"));
 
-                    $("#color_value").val("#ffffff");
+                    paletteInput.val("#ffffff");
                 }
             });
         }
