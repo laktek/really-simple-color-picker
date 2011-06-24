@@ -11,8 +11,8 @@
      * Create a couple private variables to use around our function.
     **/
     var selectorOwner,
-        selectorShowing = false,
-        cItterate = 0;
+        cItterate = 0,
+        paletteTemplate = $('<div id="colorPicker_palette" class="colorPicker-palette" />');
 
     /**
      * Create our colorPicker function
@@ -20,10 +20,81 @@
     $.fn.colorPicker = function (options) {
         var opts = $.extend({}, $.fn.colorPicker.defaults, options);
 
-        return this.each(function (it) {
-            $.fn.colorPicker.buildSelector(opts);
+        return this.each(function () {
+            // $.fn.colorPicker.buildSelector(opts);
+            // 
+            // $.fn.colorPicker.buildPicker(this, opts);
 
-            $.fn.colorPicker.buildPicker(this, opts);
+            /**
+             * Build a palette selection that we'll use to allow a user to pick a color.
+            **/
+            var newPalette  = paletteTemplate.clone().attr('id', 'colorPicker_palette-' + cItterate),
+                paletteId   = newPalette[0].id,
+                swatch      = $('<div class="color_swatch">&nbsp;</div>'),
+                hex_field   = $('<label for="color_value">Hex</label><input type="text" size="8" id="color_value" />');
+
+            //add color palette
+            $.each(opts.colors, function (i) {
+                swatch = swatch.clone();
+
+                if (opts.colors[i] === "transparent") {
+                    swatch.text('X');
+
+                    $.fn.colorPicker.bindPalette(swatch, "transparent");
+
+                } else {
+                    swatch.css("background-color", "#" + this);
+
+                    $.fn.colorPicker.bindPalette(swatch);
+
+                }
+
+                swatch.appendTo(newPalette);
+            });
+
+            hex_field.bind("keydown", function (event) {
+                if (event.keyCode === 13) {
+                    $.fn.colorPicker.changeColor($.fn.colorPicker.toHex($(this).val()));
+                }
+                if (event.keyCode === 27) {
+                    $.fn.colorPicker.togglePalette(paletteId);
+                }
+            });
+
+            $('<div id="color_custom"></div>').append(hex_field).appendTo(newPalette);
+
+            $("body").append(newPalette);
+
+            newPalette.hide();
+
+
+            /**
+             * Build the interface replacement for the color picker.
+            **/
+            var element      = this,
+                control      = $('<div class="colorPicker-picker">&nbsp;</div>'),
+                defaultColor = (opts.pickerDefault !== "FFFFFF") ? "#" + opts.pickerDefault : $(element).val();
+
+            control.css('background-color', defaultColor);
+
+            //bind click event to color picker
+            control.bind("click", function () {
+                $.fn.colorPicker.togglePalette(paletteId, $(this));
+            });
+
+            //add the color picker section
+            $(element).after(control);
+
+            //add even listener to input box
+            $(element).bind("change", function () {
+                var selectedValue = $.fn.colorPicker.toHex($(element).val());
+
+                $(element).next(".colorPicker-picker").css("background-color", selectedValue);
+            });
+
+            //hide the input box
+            $(element).hide();
+
 
             cItterate++;
         });
@@ -43,7 +114,7 @@
             if (color.match(/[0-9A-F]{6}|[0-9A-F]{3}$/i)) {
                 return (color.charAt(0) === "#") ? color : ("#" + color);
 
-            // Otherwise check for RGB color, then convert and return it as Hex.
+            // Alternatively, check for RGB color, then convert and return it as Hex.
             } else if (color.match(/^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/)) {
                 var c = ([parseInt(RegExp.$1, 10), parseInt(RegExp.$2, 10), parseInt(RegExp.$3, 10)]),
                     pad = function (str) {
@@ -64,6 +135,7 @@
                     return '#' + r + g + b;
                 }
 
+            // Otherwise we wont do anything.
             } else {
                 return false;
 
@@ -73,83 +145,82 @@
         /**
          * Check whether user clicked on the selector or owner.
         **/
-        checkMouse : function (event) {
-            var selector = "#color_selector",
+        checkMouse : function (event, paletteId) {
+            var selector = paletteId,
                 selectorParent = $(event.target).parents(selector).length;
 
             if (event.target == $(selector)[0] || event.target == selectorOwner || selectorParent > 0) {
                 return;
             }
 
-            $.fn.colorPicker.hideSelector();
+            $.fn.colorPicker.hidePalette();
         },
 
         /**
-         * Toggle visibility of the color selector.
+         * Toggle visibility of the colorPicker palette.
         **/
-        toggleSelector : function (event) {
-            selectorOwner = this;
+        togglePalette : function (paletteId, origin) {
+            var selector = $('#' + paletteId);
 
-            if (selectorShowing) {
-                $.fn.colorPicker.hideSelector();
+            if (origin) {
+                // selectorOwner is the .colorPicker-picker div we
+                // clicked on to get our color palette.
+                selectorOwner = origin;
+            }
+
+            if (selector.is(':visible')) {
+                $.fn.colorPicker.hidePalette();
 
             } else {
-                $.fn.colorPicker.showSelector();
+                $.fn.colorPicker.showPalette(selector);
 
             }
         },
 
         /**
-         * Hide the color selector.
+         * Hide the color palette modal.
         **/
-        hideSelector : function () {
-            var selector = $("#color_selector");
-
+        hidePalette : function (paletteId) {
             $(document).unbind("mousedown", $.fn.colorPicker.checkMouse);
 
-            selector.hide();
-
-            selectorShowing = false;
+            $('.colorPicker-palette').hide();
         },
 
         /**
-         * Show the color selector.
+         * Show the color palette modal.
         **/
-        showSelector : function () {
-            var selector = $("#color_selector"),
-                hexColor = $(selectorOwner).prev("input").val();
+        showPalette : function (palette) {
+            var hexColor = selectorOwner.prev("input").val();
 
-            selector.css({
-                top: $(selectorOwner).offset().top + ($(selectorOwner).outerHeight()),
-                left: $(selectorOwner).offset().left
+            palette.css({
+                top: selectorOwner.offset().top + (selectorOwner.outerHeight()),
+                left: selectorOwner.offset().left
             });
 
             $("#color_value").val(hexColor);
 
-            selector.show();
+            palette.show();
 
-            //bind close event handler
-            $(document).bind("mousedown", $.fn.colorPicker.checkMouse);
-
-            selectorShowing = true;
+            $(document).bind("mousedown", function (ev) {
+                $.fn.colorPicker.checkMouse(ev, palette.selector);
+            });
         },
 
         /**
          * Update the input with a newly selected color.
         **/
         changeColor : function (value) {
-            $(selectorOwner).css("background-color", value);
+            selectorOwner.css("background-color", value);
 
-            $(selectorOwner).prev("input").val(value).change();
+            selectorOwner.prev("input").val(value).change();
 
-            //close the selector
-            $.fn.colorPicker.hideSelector();
+            $.fn.colorPicker.hidePalette();
         },
 
         /**
-         * Bind events to the color picker swatches.
+         * Bind events to the color palette swatches.
         */
-        bindPallete : function (element, color) {
+        bindPalette : function (element, color) {
             color = (color === "transparent") ? color : $.fn.colorPicker.toHex(element.css("background-color"));
 
             element.bind({
@@ -164,85 +235,11 @@
                 mouseout : function (ev) {
                     $(this).css("border-color", "#000");
 
-                    $("#color_value").val($(selectorOwner).css("background-color"));
+                    $("#color_value").val(selectorOwner.css("background-color"));
 
                     $("#color_value").val("#ffffff");
                 }
             });
-        },
-
-        /**
-         * Build the interface replacement for the color picker.
-        **/
-        buildPicker : function (element, options) {
-            //build color picker
-            var control = $('<div class="color_picker">&nbsp;</div>'),
-                defaultColor = (options.pickerDefault !== "FFFFFF") ?
-                    "#" + options.pickerDefault :
-                    $(element).val();
-
-            control.css('background-color', defaultColor);
-
-            //bind click event to color picker
-            control.bind("click", $.fn.colorPicker.toggleSelector);
-
-            //add the color picker section
-            $(element).after(control);
-
-            //add even listener to input box
-            $(element).bind("change", function () {
-                var selectedValue = $.fn.colorPicker.toHex($(element).val());
-
-                $(element).next(".color_picker").css("background-color", selectedValue);
-            });
-
-            //hide the input box
-            $(element).hide();
-        },
-
-        /**
-         * Build a pallete selection that we'll use to allow a user to pick a color.
-        **/
-        buildSelector : function (options) {
-            var selector    = $('<div id="color_selector" />'),
-                swatch      = $('<div class="color_swatch">&nbsp;</div>'),
-                hex_field   = $('<label for="color_value">Hex</label><input type="text" size="8" id="color_value" />');
-
-            //add color pallete
-            $.each(options.colors, function (i) {
-                swatch = swatch.clone();
-
-                swatch.css("background-color", "#" + this);
-
-                $.fn.colorPicker.bindPallete(swatch);
-
-                swatch.appendTo(selector);
-            });
-
-            if (options.transparency) {
-                swatch = swatch.clone();
-
-                swatch.text('X');
-
-                $.fn.colorPicker.bindPallete(swatch, "transparent");
-
-                swatch.appendTo(selector);
-            }
-
-            hex_field.bind("keydown", function (event) {
-                if (event.keyCode == 13) {
-                    $.fn.colorPicker.changeColor($.fn.colorPicker.toHex($(this).val()));
-                }
-                if (event.keyCode == 27) {
-                    $.fn.colorPicker.toggleSelector();
-                }
-            });
-
-            $('<div id="color_custom"></div>').append(hex_field).appendTo(selector);
-
-            $("body").append(selector);
-
-            selector.hide();
         }
     });
 
@@ -253,7 +250,7 @@
      *
      * $.fn.colorPicker.defaults.colors = ['151337', '111111']
      *
-     * They can also be applied on a per-binding basis like so:
+     * They can also be applied on a per-bound element basis like so:
      *
      * $('#element1').colorPicker({pickerDefault: 'efefef', transparency: true});
      * $('#element2').colorPicker({pickerDefault: '333333', colors: ['333333', '111111']});
@@ -262,9 +259,13 @@
     $.fn.colorPicker.defaults = {
         pickerDefault : "FFFFFF",
 
-        colors : ['000000', '993300', '333300', '000080', '333399', '333333', '800000', 'FF6600', '808000', '008000', '008080', '0000FF', '666699', '808080', 'FF0000', 'FF9900', '99CC00', '339966', '33CCCC', '3366FF', '800080', '999999', 'FF00FF', 'FFCC00', 'FFFF00', '00FF00', '00FFFF', '00CCFF', '993366', 'C0C0C0', 'FF99CC', 'FFCC99', 'FFFF99', 'CCFFFF', '99CCFF', 'FFFFFF'],
-
-        transparency : false
+        colors : [
+            '000000', '993300', '333300', '000080', '333399', '333333', '800000', 'FF6600',
+            '808000', '008000', '008080', '0000FF', '666699', '808080', 'FF0000', 'FF9900',
+            '99CC00', '339966', '33CCCC', '3366FF', '800080', '999999', 'FF00FF', 'FFCC00',
+            'FFFF00', '00FF00', '00FFFF', '00CCFF', '993366', 'C0C0C0', 'FF99CC', 'FFCC99',
+            'FFFF99', 'CCFFFF', '99CCFF', 'FFFFFF'
+        ]
     };
 
 })(jQuery);
