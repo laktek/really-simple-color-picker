@@ -8,9 +8,11 @@
 
 (function ($) {
     /**
-     * Create a global itteration so we know how many times the plugin is used on a page.
+     * Create a couple private variables to use around our function.
     **/
-    var cItterate = 0;
+    var selectorOwner,
+        selectorShowing = false,
+        cItterate = 0;
 
     /**
      * Create our colorPicker function
@@ -24,14 +26,13 @@
             $.fn.colorPicker.buildPicker(this, opts);
 
             cItterate++;
-        });        
+        });
     };
 
+    /**
+     * Extend colorPicker with... all our functionality.
+    **/
     $.extend(true, $.fn.colorPicker, {
-        selectorOwner : null,
-
-        selectorShowing : false,
-
         /**
          * Return a Hex color, convert an RGB value and return Hex, or return false.
          *
@@ -76,7 +77,7 @@
             var selector = "#color_selector",
                 selectorParent = $(event.target).parents(selector).length;
 
-            if (event.target == $(selector)[0] || event.target == $.fn.colorPicker.selectorOwner || selectorParent > 0) {
+            if (event.target == $(selector)[0] || event.target == selectorOwner || selectorParent > 0) {
                 return;
             }
 
@@ -87,9 +88,9 @@
          * Toggle visibility of the color selector.
         **/
         toggleSelector : function (event) {
-            $.fn.colorPicker.selectorOwner = this;
+            selectorOwner = this;
 
-            if ($.fn.colorPicker.selectorShowing) {
+            if (selectorShowing) {
                 $.fn.colorPicker.hideSelector();
 
             } else {
@@ -108,7 +109,7 @@
 
             selector.hide();
 
-            $.fn.colorPicker.selectorShowing = false;
+            selectorShowing = false;
         },
 
         /**
@@ -116,30 +117,30 @@
         **/
         showSelector : function () {
             var selector = $("#color_selector"),
-                hexColor = $($.fn.colorPicker.selectorOwner).prev("input").val();
+                hexColor = $(selectorOwner).prev("input").val();
 
             selector.css({
-                top: $($.fn.colorPicker.selectorOwner).offset().top + ($($.fn.colorPicker.selectorOwner).outerHeight()),
-                left: $($.fn.colorPicker.selectorOwner).offset().left
+                top: $(selectorOwner).offset().top + ($(selectorOwner).outerHeight()),
+                left: $(selectorOwner).offset().left
             });
 
-            $("input#color_value").val(hexColor);
+            $("#color_value").val(hexColor);
 
             selector.show();
 
             //bind close event handler
             $(document).bind("mousedown", $.fn.colorPicker.checkMouse);
 
-            $.fn.colorPicker.selectorShowing = true;
+            selectorShowing = true;
         },
 
         /**
          * Update the input with a newly selected color.
         **/
         changeColor : function (value) {
-            $($.fn.colorPicker.selectorOwner).css("background-color", value);
+            $(selectorOwner).css("background-color", value);
 
-            $($.fn.colorPicker.selectorOwner).prev("input").val(value).change();
+            $(selectorOwner).prev("input").val(value).change();
 
             //close the selector
             $.fn.colorPicker.hideSelector();
@@ -163,7 +164,7 @@
                 mouseout : function (ev) {
                     $(this).css("border-color", "#000");
 
-                    $("#color_value").val($($.fn.colorPicker.selectorOwner).css("background-color"));
+                    $("#color_value").val($(selectorOwner).css("background-color"));
 
                     $("#color_value").val("#ffffff");
                 }
@@ -175,7 +176,7 @@
         **/
         buildPicker : function (element, options) {
             //build color picker
-            var control = $("<div class='color_picker'>&nbsp;</div>"),
+            var control = $('<div class="color_picker">&nbsp;</div>'),
                 defaultColor = (options.pickerDefault !== "FFFFFF") ?
                     "#" + options.pickerDefault :
                     $(element).val();
@@ -203,9 +204,9 @@
          * Build a pallete selection that we'll use to allow a user to pick a color.
         **/
         buildSelector : function (options) {
-            var selector    = $("<div id='color_selector'></div>"),
-                swatch      = $("<div class='color_swatch'>&nbsp;</div>"),
-                hex_field   = $("<label for='color_value'>Hex</label><input type='text' size='8' id='color_value'/>");
+            var selector    = $('<div id="color_selector" />'),
+                swatch      = $('<div class="color_swatch">&nbsp;</div>'),
+                hex_field   = $('<label for="color_value">Hex</label><input type="text" size="8" id="color_value" />');
 
             //add color pallete
             $.each(options.colors, function (i) {
@@ -237,7 +238,7 @@
                 }
             });
 
-            $("<div id='color_custom'></div>").append(hex_field).appendTo(selector);
+            $('<div id="color_custom"></div>').append(hex_field).appendTo(selector);
 
             $("body").append(selector);
 
