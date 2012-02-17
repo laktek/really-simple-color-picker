@@ -11,62 +11,77 @@ You can either clone [this repo](https://github.com/laktek/really-simple-color-p
 Color Picker requires jQuery 1.2.6 or higher. Make sure to load it before Color Picker (there's no other dependencies!). 
 For default styles of the color picker load the CSS file that comes with the plugin.
 
- <script language="javascript" type="text/javascript" src=jquery.min.js"></script>
- <script language="javascript" type="text/javascript" src="jquery.colorPicker.min.js"/></script>
+  ```html
+    <script language="javascript" type="text/javascript" src=jquery.min.js"></script>
+    <script language="javascript" type="text/javascript" src="jquery.colorPicker.min.js"/></script>
 
- <link rel="stylesheet" href="colorPicker.css" type="text/css" />
+    <link rel="stylesheet" href="colorPicker.css" type="text/css" />
+  ```
 
 Add a text field to take the color input.
-  <div><label for="color1">Color 1</label> <input id="color1" type="text" name="color1" value="#333399" /></div>
+
+  ```html
+    <div><label for="color1">Color 1</label> <input id="color1" type="text" name="color1" value="#333399" /></div>
+  ```
 
 Then call 'colorPicker' method on the text field when document loads.
-<script language="javascript">
-  jQuery(document).ready(function($) {
-    $('#color1').colorPicker();
-  }
-</script>
+
+  ```html
+    <script language="javascript">
+      jQuery(document).ready(function($) {
+        $('#color1').colorPicker();
+      }
+    </script>
+  ```
 
 ### Options
 
 There are several options you can set at the time of binding. 
 
-* Selected color
+**Selected color**
 
 Color Picker will use the value of the input field, which the picker is attached to as the selected color. If not, it will use the color passed with `pickerDefault` property.
 
-  $('#color1').colorPicker({pickerDefault: "ffffff"});
+  ```javascript
+    $('#color1').colorPicker({pickerDefault: "ffffff"});
+  ```
 
-* Color Palette 
+**Color Palette**
 
 Overrides the default color palette by passing an array of color values.
 
-  $('#color1').colorPicker({colors: ["333333", "111111"]});
+  ```javascript
+    $('#color1').colorPicker({colors: ["333333", "111111"]});
+  ```
 
-* Transparency
+**Transparency**
 
 Enable transparency value as an option.
 
-  $('#color1').colorPicker({transparency: true});
+  ```javascript
+    $('#color1').colorPicker({transparency: true});
+  ```
 
 If you want to set an option gloablly (to apply for all color pickers), use:
 
-  $.fn.colorPicker.defaults.colors = ['151337', '111111']
-
+  ```javascript
+    $.fn.colorPicker.defaults.colors = ['151337', '111111']
+  ```
 ### Demo
 
 Demo can be found at http://laktek.github.com/really-simple-color-picker/demo.html
 
 ### Real-world Examples
 
-[CurdBee](http://demo.curdbee.com/settings/branding)
-[Readability](https://www.readability.com/publishers/tools)
+* [CurdBee](http://demo.curdbee.com/settings/branding)
+* [Readability](https://www.readability.com/publishers/tools)
 
 Let us know how you are using Really Simple Color Picker...
 
 ### Contributors
 
-Lakshan Perera - http://laktek.com
-Daniel Lacy  - daniellacy.com
+* Lakshan Perera - http://laktek.com
+* Daniel Lacy  - daniellacy.com
 
 ### Issues & Suggestions
 
