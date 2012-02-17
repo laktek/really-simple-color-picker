@@ -6,8 +6,8 @@
 <title>Really Simple Color Picker</title>
 
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<script language="javascript" type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>
-<script language="javascript" type="text/javascript" src="jquery.colorPicker.js"/></script>
+<script language="javascript" type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script language="javascript" type="text/javascript" src="jquery.colorPicker.min.js"/></script>
 
 <script type="text/javascript">
   //Run the code when document ready
@@ -16,8 +16,10 @@
    //$.fn.colorPicker.addColors(['000', '000', 'fff', 'fff']);
    
    $('#color1').colorPicker();
+
    $('#color2').colorPicker();
-   $('#color3').colorPicker(); 
+
+   $('#color3').colorPicker({pickerDefault: "ffffff", colors: ["ffffff", "000000", "111FFF", "C0C0C0", "FFF000"], transparency: true}); 
    
    //fires an event when the color is changed
    //$('#color1').change(function(){
@@ -67,15 +69,13 @@ div.form-container div.controlset label { width: 100px;}
 
 	<h2>Really Simple Color Picker (jQuery)</h2>
 
-
-
-	<p>More information about this can be found in <a href="http://www.web2media.net/laktek/2008/10/27/really-simple-color-picker-in-jquery/" title="Really Simple Color Picker in jQuery">this blog article</a>.</p>
+	<p>More information about this can be found in <a href="http://www.laktek.com/2008/10/27/really-simple-color-picker-in-jquery/" title="Really Simple Color Picker in jQuery">this blog article</a>.</p>
 	<div class="form-container">
 	<form action="#" method="post">
 		<fieldset>
 			<div class="controlset"><label for="color1">Color 1</label> <input id="color1" type="text" name="color1" value="#333399" /></div>
 			<div class="controlset"><label for="color2">Color 2</label> <input id="color2" type="text" name="color2" value="#FF0000" /></div>
-			<div class="controlset"><label for="color3">Color 3</label> <input id="color3" type="text" name="color3" value="#99cc00" /></div>
+			<div class="controlset"><label for="color3">Color 3 (customized with options)</label> <input id="color3" type="text" name="color3" value="#99cc00" /></div>
 
 		</fieldset>
   
