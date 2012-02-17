@@ -54,6 +54,8 @@ If you want to set an option gloablly (to apply for all color pickers), use:
 
 ### Demo
 
+Demo can be found at http://laktek.github.com/really-simple-color-picker/demo.html
+
 ### Real-world Examples
 
 [CurdBee](http://demo.curdbee.com/settings/branding)
