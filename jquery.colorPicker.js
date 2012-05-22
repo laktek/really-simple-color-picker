@@ -90,7 +90,8 @@
 
             newHexField.bind("keydown", function (event) {
                 if (event.keyCode === 13) {
-                    $.fn.colorPicker.changeColor($.fn.colorPicker.toHex($(this).val()));
+                    var color = $.fn.colorPicker.toHex($(this).val());
+                    $.fn.colorPicker.changeColor(color ? color : element.val());
                 }
                 if (event.keyCode === 27) {
                     $.fn.colorPicker.hidePalette(paletteId);
@@ -98,9 +99,8 @@
             });
 
             newHexField.bind("keyup", function (event) {
-                var color = $.fn.colorPicker.toHex($(event.target).val());
-                if (!color) color = element.val();
-                $.fn.colorPicker.previewColor(color);
+              var color = $.fn.colorPicker.toHex($(event.target).val());
+              $.fn.colorPicker.previewColor(color ? color : element.val());
             });
 
             $('<div class="colorPicker_hexWrap" />').append(newHexLabel).appendTo(newPalette);
@@ -244,12 +244,15 @@
         **/
         changeColor : function (value) {
             selectorOwner.css("background-color", value);
-
             selectorOwner.prev("input").val(value).change();
 
             $.fn.colorPicker.hidePalette();
         },
 
+
+        /**
+         * Preview the input with a newly selected color.
+        **/
         previewColor : function (value) {
             selectorOwner.css("background-color", value);
         },
