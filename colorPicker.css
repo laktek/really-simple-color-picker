@@ -1,15 +1,15 @@
 div.colorPicker-picker {
-  height: 16px;
-  width: 16px;
+  height: 20px;
+  width: 20px;
   padding: 0 !important;
-  border: 1px solid #ccc;
-  background: url(arrow.gif) no-repeat top right;
+  border-radius: 4px;
+  -moz-border-radius: 4px;
   cursor: pointer;
-  line-height: 16px;
+  line-height: 20px;
 }
 
 div.colorPicker-palette {
-  width: 110px;
+  width: 132px;
   position: absolute;
   border: 1px solid #598FEF;
   background-color: #EFEFEF;
@@ -20,11 +20,11 @@ div.colorPicker-palette {
   div.colorPicker_hexWrap input {margin: 5px 2px; padding: 0; font-size: 95%; border: 1px solid #000; width: 65%; }
 
 div.colorPicker-swatch {
-  height: 12px;
-  width: 12px;
+  height: 16px;
+  width: 16px;
   border: 1px solid #000;
   margin: 2px;
   float: left;
   cursor: pointer;
-  line-height: 12px;
+  line-height: 16px;
 }

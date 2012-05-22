@@ -179,7 +179,7 @@
             var selector = activePalette,
                 selectorParent = $(event.target).parents("#" + selector.attr('id')).length;
 
-            if (event.target === $(selector)[0] || event.target === selectorOwner || selectorParent > 0) {
+            if (event.target === $(selector)[0] || event.target === selectorOwner[0] || selectorParent > 0) {
                 return;
             }
 
