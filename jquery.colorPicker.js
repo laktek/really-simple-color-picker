@@ -94,6 +94,7 @@
                     $.fn.colorPicker.changeColor(color ? color : element.val());
                 }
                 if (event.keyCode === 27) {
+                    $(this).val(element.val());
                     $.fn.colorPicker.hidePalette(paletteId);
                 }
             });
