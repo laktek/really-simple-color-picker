@@ -2,10 +2,12 @@ div.colorPicker-picker {
   height: 20px;
   width: 20px;
   padding: 0 !important;
-  border-radius: 4px;
-  -moz-border-radius: 4px;
   cursor: pointer;
   line-height: 20px;
+  border-bottom: 1px inset;
+  border-right: 1px inset;
+  border-radius: 4px;
+  -moz-border-radius: 4px;
 }
 
 div.colorPicker-palette {
