@@ -97,6 +97,12 @@
                 }
             });
 
+            newHexField.bind("keyup", function (event) {
+                var color = $.fn.colorPicker.toHex($(event.target).val());
+                if (!color) color = element.val();
+                $.fn.colorPicker.previewColor(color);
+            });
+
             $('<div class="colorPicker_hexWrap" />').append(newHexLabel).appendTo(newPalette);
 
             newPalette.find('.colorPicker_hexWrap').append(newHexField);
