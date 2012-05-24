@@ -3,8 +3,8 @@
  * 
  * Licensed under the MIT (MIT-LICENSE.txt) licenses.
  *
- * Copyright (c) 2008 Lakshan Perera (www.laktek.com)
- *                    Daniel Lacy (daniellacy.com)
+ * Copyright (c) 2008-2012 
+ * Lakshan Perera (www.laktek.com) & Daniel Lacy (daniellacy.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
