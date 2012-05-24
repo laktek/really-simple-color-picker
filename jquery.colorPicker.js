@@ -90,18 +90,17 @@
 
             newHexField.bind("keydown", function (event) {
                 if (event.keyCode === 13) {
-                    var color = $.fn.colorPicker.toHex($(this).val());
-                    $.fn.colorPicker.changeColor(color ? color : element.val());
+                    var hexColor = $.fn.colorPicker.toHex($(this).val());
+                    $.fn.colorPicker.changeColor(hexColor ? hexColor : element.val());
                 }
                 if (event.keyCode === 27) {
-                    $(this).val(element.val());
-                    $.fn.colorPicker.hidePalette(paletteId);
+                    $.fn.colorPicker.hidePalette();
                 }
             });
 
             newHexField.bind("keyup", function (event) {
-              var color = $.fn.colorPicker.toHex($(event.target).val());
-              $.fn.colorPicker.previewColor(color ? color : element.val());
+              var hexColor = $.fn.colorPicker.toHex($(event.target).val());
+              $.fn.colorPicker.previewColor(hexColor ? hexColor : element.val());
             });
 
             $('<div class="colorPicker_hexWrap" />').append(newHexLabel).appendTo(newPalette);
@@ -196,7 +195,7 @@
         /**
          * Hide the color palette modal.
         **/
-        hidePalette : function (paletteId) {
+        hidePalette : function () {
             $(document).unbind("mousedown", $.fn.colorPicker.checkMouse);
 
             $('.colorPicker-palette').hide();
@@ -213,7 +212,7 @@
                 left: selectorOwner.offset().left
             });
 
-            $("#color_value").val(hexColor);
+            $("input", palette).val(hexColor);
 
             palette.show();
 
