@@ -212,7 +212,7 @@
                 left: selectorOwner.offset().left
             });
 
-            $("input", palette).val(hexColor);
+            $("#color_value").val(hexColor);
 
             palette.show();
 
