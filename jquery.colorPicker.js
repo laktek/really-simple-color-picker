@@ -244,6 +244,10 @@
             $.fn.colorPicker.hidePalette();
         },
 
+        previewColor : function (value) {
+            selectorOwner.css("background-color", value);
+        },
+
         /**
          * Bind events to the color palette swatches.
         */
@@ -262,6 +266,8 @@
                     $(this).css("border-color", "#598FEF");
 
                     paletteInput.val(color);
+
+                    $.fn.colorPicker.previewColor(color);
                 },
                 mouseout : function (ev) {
                     $(this).css("border-color", "#000");
@@ -269,6 +275,8 @@
                     paletteInput.val(selectorOwner.css("background-color"));
 
                     paletteInput.val(lastColor);
+
+                    $.fn.colorPicker.previewColor(lastColor);
                 }
             });
         }
