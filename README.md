@@ -62,7 +62,7 @@ Enable transparency value as an option.
     $('#color1').colorPicker({transparency: true});
   ```
 
-** Color Change Callback **
+**Color Change Callback**
 
 Registers a callback that can be used to notify the calling code of a color change.
 
