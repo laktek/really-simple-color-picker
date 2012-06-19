@@ -1,9 +1,9 @@
 /**
  * Really Simple Color Picker in jQuery
- * 
+ *
  * Licensed under the MIT (MIT-LICENSE.txt) licenses.
  *
- * Copyright (c) 2008-2012 
+ * Copyright (c) 2008-2012
  * Lakshan Perera (www.laktek.com) & Daniel Lacy (daniellacy.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -16,7 +16,7 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
@@ -46,6 +46,10 @@
      * Create our colorPicker function
     **/
     $.fn.colorPicker = function (options) {
+        if( options.onColorChange ) {
+          $.fn.colorPicker.onColorChange = options.onColorChange;
+        }
+
         return this.each(function () {
             // Setup time. Clone new elements from our templates, set some IDs, make shortcuts, jazzercise.
             var element      = $(this),
@@ -60,6 +64,7 @@
                 paletteId    = newPalette[0].id,
                 swatch;
 
+
             /**
              * Build a color palette.
             **/
@@ -68,16 +73,11 @@
 
                 if (opts.colors[i] === transparent) {
                     swatch.addClass(transparent).text('X');
-
                     $.fn.colorPicker.bindPalette(newHexField, swatch, transparent);
-
                 } else {
                     swatch.css("background-color", "#" + this);
-
                     $.fn.colorPicker.bindPalette(newHexField, swatch);
-
                 }
-
                 swatch.appendTo(newPalette);
             });
 
@@ -140,6 +140,8 @@
      * Extend colorPicker with... all our functionality.
     **/
     $.extend(true, $.fn.colorPicker, {
+        onColorChange : function() {},
+
         /**
          * Return a Hex color, convert an RGB value and return Hex, or return false.
          *
@@ -247,6 +249,8 @@
             selectorOwner.prev("input").val(value).change();
 
             $.fn.colorPicker.hidePalette();
+
+            $.fn.colorPicker.onColorChange.call(selectorOwner, $(selectorOwner).prev("input").attr("id"), value);
         },
 
 
@@ -316,6 +320,10 @@
             'FFFF00', '00FF00', '00FFFF', '00CCFF', '993366', 'C0C0C0', 'FF99CC', 'FFCC99',
             'FFFF99', 'CCFFFF', '99CCFF', 'FFFFFF'
         ],
+
+        // callback to notify caller when color changes
+
+        onColorChange: function(){},
 
         // If we want to simply add more colors to the default set, use addColors.
         addColors : []

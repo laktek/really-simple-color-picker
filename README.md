@@ -62,6 +62,14 @@ Enable transparency value as an option.
     $('#color1').colorPicker({transparency: true});
   ```
 
+**Color Change Callback**
+
+Registers a callback that can be used to notify the calling code of a color change.
+
+  ```javascript
+    $('#color1').colorPicker( { onColorChange : function(id, newValue) { console.log("ID: " + id + " has been changed to " + newValue); } } );
+  ```
+
 If you want to set an option gloablly (to apply for all color pickers), use:
 
   ```javascript
