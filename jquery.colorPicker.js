@@ -46,9 +46,6 @@
      * Create our colorPicker function
     **/
     $.fn.colorPicker = function (options) {
-        if( options.onColorChange ) {
-          $.fn.colorPicker.onColorChange = options.onColorChange;
-        }
 
         return this.each(function () {
             // Setup time. Clone new elements from our templates, set some IDs, make shortcuts, jazzercise.
@@ -121,6 +118,11 @@
                 $.fn.colorPicker.togglePalette($('#' + paletteId), $(this));
             });
 
+            if( options && options.onColorChange ) {
+              newControl.data('onColorChange', options.onColorChange);
+            } else {
+              newControl.data('onColorChange', function() {} );
+            }
             element.after(newControl);
 
             element.bind("change", function () {
@@ -140,8 +142,6 @@
      * Extend colorPicker with... all our functionality.
     **/
     $.extend(true, $.fn.colorPicker, {
-        onColorChange : function() {},
-
         /**
          * Return a Hex color, convert an RGB value and return Hex, or return false.
          *
@@ -250,7 +250,7 @@
 
             $.fn.colorPicker.hidePalette();
 
-            $.fn.colorPicker.onColorChange.call(selectorOwner, $(selectorOwner).prev("input").attr("id"), value);
+            selectorOwner.data('onColorChange').call(selectorOwner, $(selectorOwner).prev("input").attr("id"), value);
         },
 
 
@@ -320,10 +320,6 @@
             'FFFF00', '00FF00', '00FFFF', '00CCFF', '993366', 'C0C0C0', 'FF99CC', 'FFCC99',
             'FFFF99', 'CCFFFF', '99CCFF', 'FFFFFF'
         ],
-
-        // callback to notify caller when color changes
-
-        onColorChange: function(){},
 
         // If we want to simply add more colors to the default set, use addColors.
         addColors : []
