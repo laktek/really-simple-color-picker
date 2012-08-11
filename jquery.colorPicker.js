@@ -1,9 +1,9 @@
 /**
  * Really Simple Color Picker in jQuery
- * 
+ *
  * Licensed under the MIT (MIT-LICENSE.txt) licenses.
  *
- * Copyright (c) 2008-2012 
+ * Copyright (c) 2008-2012
  * Lakshan Perera (www.laktek.com) & Daniel Lacy (daniellacy.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -16,7 +16,7 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
@@ -46,6 +46,7 @@
      * Create our colorPicker function
     **/
     $.fn.colorPicker = function (options) {
+
         return this.each(function () {
             // Setup time. Clone new elements from our templates, set some IDs, make shortcuts, jazzercise.
             var element      = $(this),
@@ -60,6 +61,7 @@
                 paletteId    = newPalette[0].id,
                 swatch;
 
+
             /**
              * Build a color palette.
             **/
@@ -68,16 +70,11 @@
 
                 if (opts.colors[i] === transparent) {
                     swatch.addClass(transparent).text('X');
-
                     $.fn.colorPicker.bindPalette(newHexField, swatch, transparent);
-
                 } else {
                     swatch.css("background-color", "#" + this);
-
                     $.fn.colorPicker.bindPalette(newHexField, swatch);
-
                 }
-
                 swatch.appendTo(newPalette);
             });
 
@@ -121,6 +118,11 @@
                 $.fn.colorPicker.togglePalette($('#' + paletteId), $(this));
             });
 
+            if( options && options.onColorChange ) {
+              newControl.data('onColorChange', options.onColorChange);
+            } else {
+              newControl.data('onColorChange', function() {} );
+            }
             element.after(newControl);
 
             element.bind("change", function () {
@@ -247,6 +249,8 @@
             selectorOwner.prev("input").val(value).change();
 
             $.fn.colorPicker.hidePalette();
+
+            selectorOwner.data('onColorChange').call(selectorOwner, $(selectorOwner).prev("input").attr("id"), value);
         },
 
 
