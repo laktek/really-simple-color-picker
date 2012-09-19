@@ -14,12 +14,37 @@
   $(function() {    
    //use this method to add new colors to pallete
    //$.fn.colorPicker.addColors(['000', '000', 'fff', 'fff']);
+
+  var colors = [
+    "cb3398",
+    "cc0001",
+    "fe6500",
+    "32ccfe",
+    "fe98ca",
+    "ffcc00",
+    "000000",
+    "c2aeeb",
+    "006500"
+  ]
+
+  var namedColors = [
+      {name: "Hot Pink", hex: "cb3398"},
+      {name: "Red", hex: "cc0001"},
+      {name: "Orange", hex: "fe6500"},
+      {name: "Powder", hex: "32ccfe"},
+      {name: "Soft Pink", hex: "fe98ca"},
+      {name: "Navy Blue", hex: "010066"},
+      {name: "Yellow", hex: "ffcc00"},
+      {name: "Black", hex: "000000"},
+      {name: "Purple", hex: "c2aeeb"},
+      {name: "Green", hex: "006500"}
+  ]   
    
    $('#color1').colorPicker();
 
-   $('#color2').colorPicker();
+   $('#color2').colorPicker({pickerDefault: "ffffff", colors: colors});
 
-   $('#color3').colorPicker({pickerDefault: "ffffff", colors: ["ffffff", "000000", "111FFF", "C0C0C0", "FFF000"], transparency: true}); 
+   $('#color3').colorPicker({pickerDefault: "ffffff", colors: namedColors, transparency: true}); 
    
    //fires an event when the color is changed
    //$('#color1').change(function(){

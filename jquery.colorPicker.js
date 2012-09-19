@@ -39,7 +39,7 @@
             hexLabel: $('<label for="colorPicker_hex">Hex</label>'),
             hexField: $('<input type="text" id="colorPicker_hex" />')
         },
-        transparent     = "transparent",
+        transparent     = "#transparent",
         lastColor;
 
     /**
@@ -65,17 +65,27 @@
             /**
              * Build a color palette.
             **/
-            $.each(opts.colors, function (i) {
+            $.each(opts.colors, function (i, option) {
                 swatch = templates.swatch.clone();
-
-                if (opts.colors[i] === transparent) {
+                if (typeof option === 'object') {
+                    var color = {
+                        name: option.name,
+                        hex: "#" + option.hex
+                    }
+                } else {
+                    var color = {
+                        name: "#" + option,
+                        hex: "#" + option
+                    }
+                }
+                if (color.hex === transparent) {
                     swatch.addClass(transparent).text('X');
                     $.fn.colorPicker.bindPalette(newHexField, swatch, transparent);
                 } else {
-                    swatch.css("background-color", "#" + this);
-                    $.fn.colorPicker.bindPalette(newHexField, swatch);
+                    swatch.css("background-color", color.hex);
+                    $.fn.colorPicker.bindPalette(newHexField, swatch, color);
                 }
-                swatch.appendTo(newPalette);
+                swatch.appendTo(newPalette);                
             });
 
             newHexLabel.attr('for', 'colorPicker_hex-' + cItterate);
@@ -244,13 +254,14 @@
         /**
          * Update the input with a newly selected color.
         **/
-        changeColor : function (value) {
-            selectorOwner.css("background-color", value);
-            selectorOwner.prev("input").val(value).change();
+        changeColor : function (color) {
+            selectorOwner.css("background-color", color.hex);
+            selectorOwner.prev("input").val(color.hex).change();
 
             $.fn.colorPicker.hidePalette();
 
-            selectorOwner.data('onColorChange').call(selectorOwner, $(selectorOwner).prev("input").attr("id"), value);
+            selectorOwner.data('onColorChange').call(selectorOwner, $(selectorOwner).prev("input").attr("id"), color.hex.replace('#',''));
+            selectorOwner.data('selected-color', color);
         },
 
 
@@ -265,8 +276,7 @@
          * Bind events to the color palette swatches.
         */
         bindPalette : function (paletteInput, element, color) {
-            color = color ? color : $.fn.colorPicker.toHex(element.css("background-color"));
-
+            // color = color ? color : $.fn.colorPicker.toHex(element.css("background-color"));
             element.bind({
                 click : function (ev) {
                     lastColor = color;
@@ -274,22 +284,23 @@
                     $.fn.colorPicker.changeColor(color);
                 },
                 mouseover : function (ev) {
-                    lastColor = paletteInput.val();
+                    selectedColor = selectorOwner.data('selected-color')
+                    lastColor = selectedColor ? selectedColor : paletteInput.val();
 
                     $(this).css("border-color", "#598FEF");
 
-                    paletteInput.val(color);
+                    paletteInput.val(color.name);
 
-                    $.fn.colorPicker.previewColor(color);
+                    $.fn.colorPicker.previewColor(color.hex);
                 },
                 mouseout : function (ev) {
                     $(this).css("border-color", "#000");
 
                     paletteInput.val(selectorOwner.css("background-color"));
 
-                    paletteInput.val(lastColor);
+                    paletteInput.val(lastColor.name ? lastColor.name : "#" + $.fn.colorPicker.defaults.pickerDefault);
 
-                    $.fn.colorPicker.previewColor(lastColor);
+                    $.fn.colorPicker.previewColor(lastColor.hex ? lastColor.hex : "#" + $.fn.colorPicker.defaults.pickerDefault);
                 }
             });
         }

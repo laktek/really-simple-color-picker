@@ -48,11 +48,17 @@ Color Picker will use the value of the input field, which the picker is attached
 
 **Color Palette**
 
-Overrides the default color palette by passing an array of color values.
+Overrides the default color palette by passing an array of color values or an array of color objects with `name` and `hex` properties.
 
   ```javascript
     $('#color1').colorPicker({colors: ["333333", "111111"]});
   ```
+_or_
+
+  ```javascript
+    $('#color1').colorPicker({colors: [{name: "Asphault", hex: "333333"}, {name: "White as Snow", hex:"ffffff"}]});
+  ```
+
 
 **Transparency**
 
@@ -90,6 +96,7 @@ Let us know how you are using Really Simple Color Picker...
 
 * Lakshan Perera - http://laktek.com
 * Daniel Lacy  - http://daniellacy.com
+* Ross Brown - http://rossisbrown.com
 
 ### Issues & Suggestions
 
