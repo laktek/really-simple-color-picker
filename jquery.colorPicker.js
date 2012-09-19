@@ -260,7 +260,7 @@
 
             $.fn.colorPicker.hidePalette();
 
-            selectorOwner.data('onColorChange').call(selectorOwner, $(selectorOwner).prev("input").attr("id"), color.hex.replace('#',''));
+            selectorOwner.data('onColorChange').call(selectorOwner, $(selectorOwner).prev("input").attr("id"), color.hex.replace('#',''), color.name);
             selectorOwner.data('selected-color', color);
         },
 
