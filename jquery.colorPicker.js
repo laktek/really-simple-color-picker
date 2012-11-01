@@ -115,8 +115,8 @@
             newControl.css("background-color", defaultColor);
 
             newControl.bind("click", function () {
-                if( element.is('not:(:disabled)) ) {
-                    $.fn.colorPicker.togglePalette($('#' + paletteId), $(this));
+                if( element.is( ':not(:disabled)' ) ) {
+									$.fn.colorPicker.togglePalette($('#' + paletteId), $(this));
                 }
             });
 
