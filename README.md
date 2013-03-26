@@ -1,4 +1,4 @@
-## Really Simple Color Picker 
+ ## Really Simple Color Picker 
 
 This is a very minimal, yet robust Color Picker based on jQuery.
 
@@ -32,6 +32,11 @@ Then call 'colorPicker' method on the text field when document loads.
         $('#color1').colorPicker();
       }
     </script>
+  ```
+### Add Personal Colors
+  Add a new color into the color picker
+  ```javascript
+    $.fn.colorPicker.addPersonalColor({element:'#color1',colors:['b35AF1', 'b35F5A', 'b5C7C7']});
   ```
 
 ### Options
