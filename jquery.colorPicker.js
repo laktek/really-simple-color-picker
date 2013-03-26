@@ -38,7 +38,6 @@
 			swatch  : $('<div class="colorPicker-swatch">&nbsp;</div>'),
 			hexLabel: $('<label for="colorPicker_hex">Hex</label>'),
 			hexField: $('<input type="text" id="colorPicker_hex" />'),
-			personalLabel: $('<div>Cores Personalizadas</div>'),
 			personalColors: $('<div class="colorPicker-swatch-personal">&nbsp;</div>')
 		},
 		transparent     = "transparent",
@@ -59,7 +58,6 @@
 				newPalette   = templates.palette.clone().attr('id', 'colorPicker_palette-' + cItterate),
 				newHexLabel  = templates.hexLabel.clone(),
 				newHexField  = templates.hexField.clone(),
-				personalLabel  = templates.personalLabel.clone(),
 				personalColors  = templates.personalColors.clone(),
 				paletteId    = newPalette[0].id,
 				swatch;
@@ -116,33 +114,26 @@
 
 
 			/**
-			 * Build replacement interface for original color input.
-			**/
-			newControl.css("background-color", defaultColor);
+             * Build replacement interface for original color input.
+            **/
+            newControl.css("background-color", defaultColor);
 
-			newControl.bind("click", function () {
-				if( element.is( ':not(:disabled)' ) ) {
-					$.fn.colorPicker.togglePalette($('#' + paletteId), $(this));
-				}
-			});
+            newControl.bind("click", function () {
+                $.fn.colorPicker.togglePalette($('#' + paletteId), $(this));
+            });
 
-			if( options && options.onColorChange ) {
-			  newControl.data('onColorChange', options.onColorChange);
-			} else {
-			  newControl.data('onColorChange', function() {} );
-			}
-			element.after(newControl);
+            element.after(newControl);
 
-			element.bind("change", function () {
-				element.next(".colorPicker-picker -").css(
-					"background-color", $.fn.colorPicker.toHex($(this).val())
-				);
-			});
+            element.bind("change", function () {
+                element.next(".colorPicker-picker").css(
+                    "background-color", $.fn.colorPicker.toHex($(this).val())
+                );
+            });
 
-			// Hide the original input.
-			element.val(defaultColor).hide();
+            // Hide the original input.
+            element.val(defaultColor).hide();
 
-			cItterate++;
+            cItterate++;
 		});
 
 		return cPiccker;
@@ -255,13 +246,11 @@
 		 * Update the input with a newly selected color.
 		**/
 		changeColor : function (value) {
-			selectorOwner.css("background-color", value);
-			selectorOwner.prev("input").val(value).change();
+            selectorOwner.css("background-color", value);
+            selectorOwner.prev("input").val(value).change();
 
-			$.fn.colorPicker.hidePalette();
-
-			selectorOwner.data('onColorChange').call(selectorOwner, $(selectorOwner).prev("input").attr("id"), value);
-		},
+            $.fn.colorPicker.hidePalette();
+        },
 
 
 		/**
@@ -325,9 +314,6 @@
 			var newControl   = templates.control.clone(),
 				personalColors  = templates.personalColors.clone(),
 				paletteId    = element.data('colorPickerId'),
-				defaultColor = $.fn.colorPicker.toHex(
-					(element.val().length > 0) ? element.val() : opts.pickerDefault
-				),
 				swatch;
 
 			/**
@@ -350,12 +336,6 @@
 				}
 				swatch.prependTo($('#'+paletteId +' .colorPicker-swatch-personal'));
 			});         
-
-			hexField.attr('for', hexFieldStr);
-			hexField.attr({
-				'id'    : hexFieldStr,
-				'value' : defaultColor
-			});
 		}
 	});
 

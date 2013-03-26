@@ -1,5 +1,6 @@
+
 div.colorPicker-picker  {
-  background: transparent;
+    background: transparent;
     border: 1px solid #BBBBBB;
     cursor: pointer;
     height: 18px;
@@ -24,19 +25,24 @@ div.colorPicker-palette {
     margin: 5px 2px; 
     padding: 0; 
     font-size: 95%; 
-    border: 1px solid #000; 
+    border: 1px solid #ccc;
+    border-radius: 0;
     width: 65%; 
   }
-
 div.colorPicker-swatch {
-  height: 10px;
   width: 20px;
-  width: 20px;
-  margin: 2px;
+  height: 20px;
+  margin: 0px;
   float: left;
   cursor: pointer;
   line-height: 12px;
+  border: 1px solid #eee !important;
 }
+
+div.colorPicker-swatch:hover {
+  border: 1px solid #333 !important;
+}
+
 
 div.colorPicker-swatch:hover {
   border: 1px solid #333 !important;
