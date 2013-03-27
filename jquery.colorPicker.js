@@ -324,9 +324,12 @@
 
 			var hexField = $('#'+hexFieldStr);
 
+			for(i in colors){
+				colors[i] = $.fn.colorPicker.toHex(colors[i]);
+			}
+
 			$.each(colors, function (i) {
 				swatch = templates.swatch.clone();
-
 				if (colors[i] === transparent) {
 					swatch.addClass(transparent).text('X');
 					$.fn.colorPicker.bindPalette(hexField, swatch, transparent);
