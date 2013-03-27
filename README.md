@@ -39,6 +39,12 @@ Then call 'colorPicker' method on the text field when document loads.
     $.fn.colorPicker.addPersonalColor({element:'#color1',colors:['b35AF1', 'b35F5A', 'b5C7C7']});
   ```
 
+### Reset Personal Colors
+  Reset all personal colors on the color picker
+  ```javascript
+    $.fn.colorPicker.resetPersonalColor({element:'#color1'});
+  ```
+
 ### Options
 
 There are several options you can set at the time of binding. 
