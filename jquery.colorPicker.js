@@ -324,7 +324,7 @@
 
 			var hexField = $('#'+hexFieldStr);
 
-			for(i in colors){
+			for(var i=0; i<colors.length; i++){
 				colors[i] = $.fn.colorPicker.toHex(colors[i]);
 			}
 
@@ -334,11 +334,28 @@
 					swatch.addClass(transparent).text('X');
 					$.fn.colorPicker.bindPalette(hexField, swatch, transparent);
 				} else {
-					swatch.css("background-color", "#" + this);
+					swatch.css("background-color", this);
 					$.fn.colorPicker.bindPalette(hexField, swatch);
 				}
 				swatch.prependTo($('#'+paletteId +' .colorPicker-swatch-personal'));
-			});         
+			});
+			return true;
+		},
+
+		/**
+		 * Add personal Colors to palette 
+		 * Wemerson Silva
+		*/
+		resetPersonalColor : function (options) {
+
+			element = $(options.element);
+			if(element.length <= 0){
+				return false;
+			}
+			var paletteId = element.data('colorPickerId'),
+				swatch;
+			$('#'+paletteId +' .colorPicker-swatch-personal').html('&nbsp;');
+			return true;
 		}
 	});
 
