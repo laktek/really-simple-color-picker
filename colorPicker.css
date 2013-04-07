@@ -6,6 +6,9 @@ div.colorPicker-picker {
   background: url(arrow.gif) no-repeat top right;
   cursor: pointer;
   line-height: 16px;
+  font-size:0.75em;
+  font-weight:bold;
+  text-align: center;
 }
 
 div.colorPicker-palette {
