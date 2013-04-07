@@ -59,7 +59,7 @@
                 newHexLabel  = templates.hexLabel.clone(),
                 newHexField  = templates.hexField.clone(),
                 paletteId    = newPalette[0].id,
-                swatch;
+                swatch, controlText;
 
 
             /**
@@ -116,7 +116,7 @@
 
             newControl.bind("click", function () {
                 if( element.is( ':not(:disabled)' ) ) {
-									$.fn.colorPicker.togglePalette($('#' + paletteId), $(this));
+                                    $.fn.colorPicker.togglePalette($('#' + paletteId), $(this));
                 }
             });
 
@@ -125,6 +125,10 @@
             } else {
               newControl.data('onColorChange', function() {} );
             }
+
+            if (controlText = element.data('text'))
+                newControl.html(controlText)
+
             element.after(newControl);
 
             element.bind("change", function () {

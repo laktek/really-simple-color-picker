@@ -75,6 +75,19 @@ If you want to set an option gloablly (to apply for all color pickers), use:
   ```javascript
     $.fn.colorPicker.defaults.colors = ['151337', '111111']
   ```
+
+**Default text on picker field**
+
+You can set some text to show on the picker field. For example, you could show a user's initials.
+
+  ```html
+    <input id="color4" type="text" name="color4" value="#FF0000" data-text="AG" />
+  ```
+
+  ```javascript
+    $('#color4').colorPicker();
+  ```
+
 ### Demo
 
 Demo can be found at http://laktek.github.com/really-simple-color-picker/demo.html
