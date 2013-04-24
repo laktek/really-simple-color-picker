@@ -78,6 +78,7 @@
                 swatch.appendTo(newPalette);
             });
 
+
             newHexLabel.attr('for', 'colorPicker_hex-' + cItterate);
 
             newHexField.attr({
@@ -103,6 +104,10 @@
             $('<div class="colorPicker_hexWrap" />').append(newHexLabel).appendTo(newPalette);
 
             newPalette.find('.colorPicker_hexWrap').append(newHexField);
+            if (opts.showHexField === false) {
+                newHexField.hide();
+                newHexLabel.hide();
+            }
 
             $("body").append(newPalette);
 
@@ -328,7 +333,10 @@
         ],
 
         // If we want to simply add more colors to the default set, use addColors.
-        addColors : []
+        addColors : [],
+
+        // Show hex field
+        showHexField: true
     };
 
 })(jQuery);
