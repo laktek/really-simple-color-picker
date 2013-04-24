@@ -142,8 +142,14 @@
                 );
             });
 
+            element.val(defaultColor);
+
             // Hide the original input.
-            element.val(defaultColor).hide();
+            if (element[0].tagName.toLowerCase() === 'input') {
+                element.each(function () { this.type = 'hidden' });
+            } else {
+                element.hide();
+            }
 
             cItterate++;
         });
