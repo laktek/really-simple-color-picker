@@ -78,6 +78,7 @@
                 swatch.appendTo(newPalette);
             });
 
+
             newHexLabel.attr('for', 'colorPicker_hex-' + cItterate);
 
             newHexField.attr({
@@ -103,6 +104,10 @@
             $('<div class="colorPicker_hexWrap" />').append(newHexLabel).appendTo(newPalette);
 
             newPalette.find('.colorPicker_hexWrap').append(newHexField);
+            if (opts.showHexField === false) {
+                newHexField.hide();
+                newHexLabel.hide();
+            }
 
             $("body").append(newPalette);
 
@@ -137,8 +142,14 @@
                 );
             });
 
+            element.val(defaultColor);
+
             // Hide the original input.
-            element.val(defaultColor).hide();
+            if (element[0].tagName.toLowerCase() === 'input') {
+                element.each(function () { this.type = 'hidden' });
+            } else {
+                element.hide();
+            }
 
             cItterate++;
         });
@@ -328,7 +339,10 @@
         ],
 
         // If we want to simply add more colors to the default set, use addColors.
-        addColors : []
+        addColors : [],
+
+        // Show hex field
+        showHexField: true
     };
 
 })(jQuery);
