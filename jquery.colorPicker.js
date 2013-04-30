@@ -42,12 +42,11 @@
 		},
 		transparent     = "transparent",
 		lastColor;
-
 	/**
 	 * Create our colorPicker function
 	**/
 	$.fn.colorPicker = function (options) {
-		var cPiccker = this.each(function () {
+		return this.each(function () {
 			// Setup time. Clone new elements from our templates, set some IDs, make shortcuts, jazzercise.
 			var element      = $(this),
 				opts         = $.extend({}, $.fn.colorPicker.defaults, options),
@@ -106,6 +105,11 @@
 			$('<div class="colorPicker_hexWrap" />').append(newHexLabel).appendTo(newPalette);
 
 			newPalette.find('.colorPicker_hexWrap').append(newHexField);
+            if (opts.showHexField === false) {
+                newHexField.hide();
+                newHexLabel.hide();
+            }
+			
 			newPalette.find('.colorPicker_hexWrap').append(personalColors);
 
 			$("body").append(newPalette);
@@ -119,9 +123,20 @@
             newControl.css("background-color", defaultColor);
 
             newControl.bind("click", function () {
-                $.fn.colorPicker.togglePalette($('#' + paletteId), $(this));
+                if( element.is( ':not(:disabled)' ) ) {
+					$.fn.colorPicker.togglePalette($('#' + paletteId), $(this));
+                }
             });
+			
+			if( options && options.onColorChange ) {
+				newControl.data('onColorChange', options.onColorChange);
+            } else {
+              newControl.data('onColorChange', function() {} );
+            }
 
+            if (controlText = element.data('text'))
+                newControl.html(controlText)
+			
             element.after(newControl);
 
             element.bind("change", function () {
@@ -131,12 +146,14 @@
             });
 
             // Hide the original input.
-            element.val(defaultColor).hide();
+            if (element[0].tagName.toLowerCase() === 'input') {
+                element.each(function () { this.type = 'hidden' });
+            } else {
+                element.hide();
+            }
 
             cItterate++;
 		});
-
-		return cPiccker;
 	};
 
 	/**
@@ -152,7 +169,7 @@
 			// If we have a standard or shorthand Hex color, return that value.
 			if (color.match(/[0-9A-F]{6}|[0-9A-F]{3}$/i)) {
 				return (color.charAt(0) === "#") ? color : ("#" + color);
-
+				
 			// Alternatively, check for RGB color, then convert and return it as Hex.
 			} else if (color.match(/^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/)) {
 				var c = ([parseInt(RegExp.$1, 10), parseInt(RegExp.$2, 10), parseInt(RegExp.$3, 10)]),
@@ -162,36 +179,28 @@
 								str = '0' + str;
 							}
 						}
-
 						return str;
 					};
-
 				if (c.length === 3) {
 					var r = pad(c[0].toString(16)),
 						g = pad(c[1].toString(16)),
 						b = pad(c[2].toString(16));
-
 					return '#' + r + g + b;
 				}
-
 			// Otherwise we wont do anything.
 			} else {
 				return false;
-
 			}
 		},
-
 		/**
 		 * Check whether user clicked on the selector or owner.
 		**/
 		checkMouse : function (event, paletteId) {
 			var selector = activePalette,
 				selectorParent = $(event.target).parents("#" + selector.attr('id')).length;
-
 			if (event.target === $(selector)[0] || event.target === selectorOwner[0] || selectorParent > 0) {
 				return;
 			}
-
 			$.fn.colorPicker.hidePalette();
 		},
 
@@ -248,8 +257,8 @@
 		changeColor : function (value) {
             selectorOwner.css("background-color", value);
             selectorOwner.prev("input").val(value).change();
-
             $.fn.colorPicker.hidePalette();
+            selectorOwner.data('onColorChange').call(selectorOwner, $(selectorOwner).prev("input").attr("id"), value);
         },
 
 
@@ -265,7 +274,6 @@
 		*/
 		bindPalette : function (paletteInput, element, color) {
 			color = color ? color : $.fn.colorPicker.toHex(element.css("background-color"));
-
 			element.bind({
 				click : function (ev) {
 					lastColor = color;
@@ -274,7 +282,6 @@
 				},
 				mouseover : function (ev) {
 					lastColor = paletteInput.val();
-
 					$(this).css("border-color", "#598FEF");
 
 					paletteInput.val(color);
@@ -283,7 +290,6 @@
 				},
 				mouseout : function (ev) {
 					$(this).css("border-color", "#000");
-
 					paletteInput.val(selectorOwner.css("background-color"));
 
 					paletteInput.val(lastColor);
@@ -386,7 +392,10 @@
 		],
 
 		// If we want to simply add more colors to the default set, use addColors.
-		addColors : []
+		addColors : [],
+		
+		// Show hex field
+        showHexField: true
 	};
 
 
