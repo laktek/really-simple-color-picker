@@ -146,7 +146,11 @@
 
             // Hide the original input.
             if (element[0].tagName.toLowerCase() === 'input') {
-                element.each(function () { this.type = 'hidden' });
+                try {
+                    element.attr('type', 'hidden')
+                } catch(err) { // oldIE doesn't allow changing of input.type
+                    element.css('visibility', 'hidden').css('position', 'absolute')
+                }
             } else {
                 element.hide();
             }
