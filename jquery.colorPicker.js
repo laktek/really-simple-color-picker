@@ -51,7 +51,7 @@
             // Setup time. Clone new elements from our templates, set some IDs, make shortcuts, jazzercise.
             var element      = $(this),
                 opts         = $.extend({}, $.fn.colorPicker.defaults, options),
-                 dColors 	 = opts.colors,
+                dColors 	 = opts.colors,
                 elValue	     = (opts.pickByIndex) ? dColors[opts.pickByIndex % dColors.length ] : (element.val() || opts.pickerDefault),
                 defaultColor = $.fn.colorPicker.toHex(elValue),
                 newControl   = templates.control.clone(),
