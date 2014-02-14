@@ -101,8 +101,13 @@
               $.fn.colorPicker.previewColor(hexColor ? hexColor : element.val());
             });
 
-            $('<div class="colorPicker_hexWrap" />').append(newHexLabel).appendTo(newPalette);
+            if (opts.position === 'top') {
+                $('<div class="colorPicker_hexWrap" />').append(newHexLabel).prependTo(newPalette);
+            } else {
+                $('<div class="colorPicker_hexWrap" />').append(newHexLabel).appendTo(newPalette);
+            }
 
+            newPalette.data('position', opts.position);
             newPalette.find('.colorPicker_hexWrap').append(newHexField);
             if (opts.showHexField === false) {
                 newHexField.hide();
@@ -229,10 +234,27 @@
         **/
         showPalette : function (palette) {
             var hexColor = selectorOwner.prev("input").val();
+            var position = palette.data('position');
+
+            var topOffset, leftOffset;
+            if (position === 'top') {
+                topOffset = selectorOwner.offset().top - palette.outerHeight();
+                leftOffset = selectorOwner.offset().left;
+            } else if (position === 'left') {
+                topOffset = selectorOwner.offset().top;
+                leftOffset = selectorOwner.offset().left - palette.outerWidth();
+            } else if (position === 'right') {
+                topOffset = selectorOwner.offset().top;
+                leftOffset = selectorOwner.offset().left + selectorOwner.outerWidth();
+            } else {
+                // DEFAULT: 'bottom'
+                topOffset = selectorOwner.offset().top + selectorOwner.outerHeight();
+                leftOffset = selectorOwner.offset().left;
+            }
 
             palette.css({
-                top: selectorOwner.offset().top + (selectorOwner.outerHeight()),
-                left: selectorOwner.offset().left
+                top: topOffset,
+                left: leftOffset
             });
 
             $("#color_value").val(hexColor);
@@ -346,7 +368,9 @@
         addColors : [],
 
         // Show hex field
-        showHexField: true
+        showHexField: true,
+        // Position of palette relative to selector
+        position: 'bottom'
     };
 
 })(jQuery);
