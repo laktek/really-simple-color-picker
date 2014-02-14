@@ -88,6 +88,17 @@ You can set some text to show on the picker field. For example, you could show a
     $('#color4').colorPicker();
   ```
 
+**Position of popover**
+
+You can set the position of the popover relative to the selector.  Options are: 'top', 'left', 'right', 'bottom'.  Default is 'bottom'.
+
+When 'top' position is used, the hex input field will appear above the color palettes.
+
+  ```javascript
+    $('#color1').colorPicker({position: 'top'});
+  ```
+
+
 ### Demo
 
 Demo can be found at http://laktek.github.com/really-simple-color-picker/demo.html
