@@ -32,3 +32,7 @@ div.colorPicker-swatch {
   cursor: pointer;
   line-height: 12px;
 }
+span.colorPicker-swatch {
+	float: right;
+	clear: both;
+}

@@ -40,6 +40,7 @@
             hexField: $('<input type="text" id="colorPicker_hex" />')
         },
         transparent     = "transparent",
+        newline         = "newline",
         lastColor;
 
     /**
@@ -67,8 +68,10 @@
             **/
             $.each(opts.colors, function (i) {
                 swatch = templates.swatch.clone();
-
-                if (opts.colors[i] === transparent) {
+				if( opts.colors[i] === newline ) {
+					swatch = $("<span class='colorPicker-swatch'/>");
+					swatch.appendTo(newPalette);
+				} else if (opts.colors[i] === transparent) {
                     swatch.addClass(transparent).text('X');
                     $.fn.colorPicker.bindPalette(newHexField, swatch, transparent);
                 } else {
