@@ -137,9 +137,9 @@
             element.after(newControl);
 
             element.bind("change", function () {
-                element.next(".colorPicker-picker").css(
-                    "background-color", $.fn.colorPicker.toHex($(this).val())
-                );
+                var hexColor = $.fn.colorPicker.toHex($(this).val());
+                element.next(".colorPicker-picker").css("background-color", hexColor);
+                newHexField.val(hexColor);
             });
 
             element.val(defaultColor);
