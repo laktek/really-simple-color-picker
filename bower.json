@@ -1,0 +1,14 @@
+{
+  "name": "really-simple-colorpicker",
+  "main": [
+    "./js/jquery.colorPicker.js",
+    "./css/colorPicker.css"
+  ],
+  "ignore": [
+    "demo.html",
+    "arrow.gif"
+  ],
+  "dependencies": {
+    "jquery": "*"
+  }
+}
