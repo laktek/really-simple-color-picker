@@ -6,9 +6,9 @@
   ],
   "ignore": [
     "demo.html",
-    "arrow.gif"
+    "screenshot.png"
   ],
   "dependencies": {
-    "jquery": "*"
+    "jquery": ">= 1.2.6"
   }
 }
