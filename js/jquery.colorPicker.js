@@ -305,11 +305,7 @@
                 },
                 mouseout : function (ev) {
                     $(this).css("border-color", "#000");
-
-                    paletteInput.val(selectorOwner.css("background-color"));
-
                     paletteInput.val(lastColor);
-
                     $.fn.colorPicker.previewColor(lastColor);
                 }
             });
