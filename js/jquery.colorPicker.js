@@ -224,18 +224,71 @@
             $('.colorPicker-palette').hide();
         },
 
+
+        /**
+         * calculate the top position of palette
+         **/
+        calculatePalettePositionTop: function (palette) {
+            var win = $(window),
+                winBottom= win.scrollTop() + win.height();
+
+            var ownerTop = selectorOwner.offset().top,
+                ownerHeight = selectorOwner.outerHeight();
+
+            var top = ownerTop + ownerHeight,
+                height = palette.outerHeight(),
+                bottom = top + height;
+
+            if (bottom > winBottom) { // if palette overflow bottom
+                top = ownerTop - height;
+            }
+
+            return top;
+        },
+
+        /**
+         * calculate the left position of palette
+         **/
+        calculatePalettePositionLeft: function (palette) {
+            var win = $(window),
+                winRight = win.scrollLeft() + win.width();
+
+            var ownerLeft = selectorOwner.offset().left,
+                ownerRight = selectorOwner.offset().left + selectorOwner.outerWidth();
+
+            var left = ownerLeft,
+                width = palette.outerWidth(),
+                right = left + width;
+
+            if (right > winRight) { // if palette overflows right
+                var margin = 10;// This is a magic number
+                left = Math.min(ownerRight, winRight - margin) - width;
+            }
+
+            return left;
+        },
+
+        adjustPalettePosition: function (palette) {
+            var top = $.fn.colorPicker.calculatePalettePositionTop(palette);
+            var left = $.fn.colorPicker.calculatePalettePositionLeft(palette);
+
+            palette.css({
+                /**
+                 * adjust the position of color palette modal
+                 **/
+                top: top,
+                left: left
+            });
+        },
+
         /**
          * Show the color palette modal.
         **/
         showPalette : function (palette) {
             var hexColor = selectorOwner.prev("input").val();
-
-            palette.css({
-                top: selectorOwner.offset().top + (selectorOwner.outerHeight()),
-                left: selectorOwner.offset().left
-            });
-
             $("#color_value").val(hexColor);
+
+            $.fn.colorPicker.adjustPalettePosition(palette);
 
             palette.show();
 
@@ -350,3 +403,4 @@
     };
 
 })(jQuery);
+
