@@ -170,7 +170,7 @@
         **/
         toHex : function (color) {
             // If we have a standard or shorthand Hex color, return that value.
-            if (color.match(/[0-9A-F]{6}|[0-9A-F]{3}$/i)) {
+            if (color.match(/^(#?)[0-9A-F]{6}$/i) || color.match(/^(#?)[0-9A-F]{3}$/i)) {
                 return (color.charAt(0) === "#") ? color : ("#" + color);
 
             // Alternatively, check for RGB color, then convert and return it as Hex.
