@@ -98,7 +98,11 @@
 
             newHexField.bind("keyup", function (event) {
               var hexColor = $.fn.colorPicker.toHex($(event.target).val());
-              $.fn.colorPicker.previewColor(hexColor ? hexColor : element.val());
+              if(hexColor){
+                $.fn.colorPicker.previewColor(hexColor);
+                selectorOwner.prev("input").val(hexColor).change();
+                newHexField.val(hexColor);
+              }
             });
 
             $('<div class="colorPicker_hexWrap" />').append(newHexLabel).appendTo(newPalette);
